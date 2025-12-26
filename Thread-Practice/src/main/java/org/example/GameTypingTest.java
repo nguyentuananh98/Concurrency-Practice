@@ -1,6 +1,6 @@
 package org.example;
 
-public class GameTypingTest implements CharacterSource {
+public class GameTypingTest implements CharacterSource, CharacterListener {
     protected RandomCharacterGenerator producer;
     private CharacterEventHandle handler;
     protected static char[] tmpChar = new char[1];
@@ -25,17 +25,21 @@ public class GameTypingTest implements CharacterSource {
         handler.fireNewCharacter(this, c);
     }
 
-//    public void setCharacterSource(CharacterSource source) {
-//        source.addCharacterListener(this);
-//    }
+    public void setCharacterSource(CharacterSource source) {
+        source.addCharacterListener(this);
+    }
 
     public static void main(String[] args) {
         RandomCharacterGenerator producer = new RandomCharacterGenerator();
         GameTypingTest game = new GameTypingTest();
 
-        //game.setCharacterSource(producer); //
+        game.setCharacterSource(producer);
         producer.start();
     }
 
-
+    @Override
+    public synchronized void newCharacter(CharacterEvent ce) {
+        tmpChar[0] = (char) ce.character;
+        System.out.println("Received character: " + tmpChar[0]);
+    }
 }
