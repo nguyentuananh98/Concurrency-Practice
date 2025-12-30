@@ -34,8 +34,10 @@ public class App {
         ObjectLocking obj1 = new ObjectLocking();
         ObjectLocking obj2 = new ObjectLocking();
 
-        Runnable task1 = obj1::instanceMethod;
-        Runnable task2 = obj2::instanceMethod;
+        // Class Locking
+
+        Runnable task1 = ClassLocking::instanceMethod;
+        Runnable task2 = ClassLocking::instanceMethod;
 
         new Thread(task1, "First Thread").start();
         new Thread(task2, "Second Thread").start();
