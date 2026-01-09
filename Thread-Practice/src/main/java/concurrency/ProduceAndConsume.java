@@ -8,6 +8,7 @@ class SharedBuffer {
     private final int capacity = 5;
 
     public synchronized void produce () throws InterruptedException {
+        // Joshua Block's approach
         while (buffer.size() == capacity) {
             System.out.println("Buffer full, producer waiting...");
             wait();
@@ -84,10 +85,8 @@ public class ProduceAndConsume {
     public static void main(String[] args) {
         var sharedBuffer = new SharedBuffer();
 
-        Thread t2 = new Thread(new Producer(sharedBuffer));
-        Thread t1 = new Thread(new Consumer(sharedBuffer));
-
-
+        Thread t2 = new Thread(new Producer(sharedBuffer), "Producer-Thread");
+        Thread t1 = new Thread(new Consumer(sharedBuffer), "Consumer-Thread");
 
         t1.start();
         t2.start();
