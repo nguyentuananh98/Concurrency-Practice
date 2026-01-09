@@ -8,7 +8,7 @@ class SharedBuffer {
     private final int capacity = 5;
 
     public synchronized void produce () throws InterruptedException {
-        if (buffer.size() == capacity) {
+        while (buffer.size() == capacity) {
             System.out.println("Buffer full, producer waiting...");
             wait();
         }
