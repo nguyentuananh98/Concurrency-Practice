@@ -1,15 +1,31 @@
 package concurrency;
 
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 public class ReentrantExample {
+    private final ReentrantReadWriteLock reentrantReadWriteLock = new ReentrantReadWriteLock();
     public synchronized void outerMethod() {
-        System.out.println("Entered outerMethod");
-        innerMethod();
-        System.out.println("Exiting outerMethod");
+        try {
+            System.out.println("Entered outerMethod");
+            innerMethod();
+            System.out.println("Exiting outerMethod");
+        } catch (Exception e) {
+            throw new RuntimeException("abc");
+        }
+
     }
-    public synchronized void innerMethod() {
-        System.out.println("Entered innerMethod");
-        // Do something
-        System.out.println("Exiting innerMethod");
+    public void innerMethod(){
+        reentrantReadWriteLock.readLock().lock();
+        try {
+            System.out.println("Entered innerMethod");
+            // Do something
+            System.out.println("Exiting innerMethod");
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Abc");
+        } finally {
+            reentrantReadWriteLock.readLock().unlock();
+        }
+
     }
 
     public static void main(String[] args) {
